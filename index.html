@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enraizadas na Palavra: Um Guia Interativo sobre a Modéstia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #FDF8F5; color: #2E2E2E; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .active-nav { color: #B26A8F; transform: scale(1.05); font-weight: 600; }
+        .active-nav svg { fill: #B26A8F; stroke: #B26A8F; }
+        .tab-btn { transition: all 0.3s ease; }
+        .tab-btn.active { background-color: #B26A8F; color: #FFFFFF; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+        .tab-btn:not(.active) { background-color: transparent; color: #B26A8F; border: 1px solid #B26A8F;}
+        .content-section { display: none;}
+        .content-section.active { display: block;}
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease;}
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05);}
+        .floral-background { background-image: url('https://images.unsplash.com/photo-1502904791050-c44d70b777a8?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;}
+        .floral-background::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(252,238,239,0.85); z-index: 0;}
+        .floral-background > * { position: relative; z-index: 1; }
+        .modal-overlay { opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;}
+        .modal-overlay.active { opacity: 1; visibility: visible;}
+        .close-button { cursor: pointer;}
+        .clickable-element { cursor: pointer;}
+
+        /* Personalização da barra de rolagem dos cards em destaque */
+        #highlighted-card-container > div {
+            scrollbar-width: thin;
+            scrollbar-color: #B26A8F #FDF8F5;
+        }
+        #highlighted-card-container > div::-webkit-scrollbar {
+            width: 8px;
+            background: #FDF8F5;
+        }
+        #highlighted-card-container > div::-webkit-scrollbar-thumb {
+            background: #B26A8F;
+            border-radius: 10px;
+        }
+        .hero-title {
+    text-shadow: 2px 2px 8px rgb(70, 4, 47), 0 1px 0 #fff;
+}
+
+    </style>
+</head>
+<body class="antialiased">
+    
+    <!-- Cabeçalho Fixo com Navegação -->
+    <header class="sticky top-0 z-50 bg-[#FDF8F5]/80 backdrop-blur-sm shadow-md">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-[#2E2E2E] tracking-wider flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open text-[#B26A8F]"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    <span>Enraizadas na Palavra</span>
+                </a>
+                <!-- Navegação para desktop -->
+                <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
+                    <a href="#fundamento" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                        <span>Fundamento</span>
+                    </a>
+                    <a href="#beleza-modestia" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="M9.9 10.9c.3.9-.4 1.6-1.3 1.3L4 10l-.7 2.7c-.3.9.4 1.6 1.3 1.3L10 14l.7-2.7c.3-.9-.4-1.6-1.3-1.3Z"/><path d="M18.5 2.5c.2.5-.2 1-.7.8l-3.5-1.3c-.5-.2-1-.7-.8-1.2l1.3-3.5c.2-.5.7-1 .8-.8l3.5 1.3c.5.2 1 .7.8 1.2L18.5 2.5Z"/><path d="M15.4 22.3c.3.9-.4 1.6-1.3 1.3L9 20l-.7 2.7c-.3.9.4 1.6 1.3 1.3L15 24l.7-2.7c.3-.9-.4-1.6-1.3-1.3Z"/><path d="M20.3 15.1c.2.5-.2 1-.7.8l-3.5-1.3c-.5-.2-1-.7-.8-1.2l1.3-3.5c.2-.5.7-1 .8-.8l3.5 1.3c.5.2 1 .7.8 1.2L20.3 15.1Z"/></svg>
+                        <span>A Beleza da Modéstia</span>
+                    </a>
+                    <a href="#coracao" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        <span>O Coração da Modéstia</span>
+                    </a>
+                    <a href="#vestimenta-reflexo" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-t-shirt"><path d="M7 21h10"/><path d="M12.2 21h-.4c-.6 0-1-.4-1-1V5c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v15c0 .6-.4 1-1 1h-.4"/><path d="M13 2c-.6 0-1 .4-1 1v2h3V3c0-.6-.4-1-1-1h-1z"/></svg>
+                        <span>Vestimenta e Reflexo</span>
+                    </a>
+                    <a href="#exemplos" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb"><path d="M15 14c.2-1 .7-2 1.5-3s2.5-2.5 3.5-5c.4-1-.3-1.7-1.2-2.5C16.5 2.5 13 4 13 4"/><path d="M14.5 11.5 13 16c0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.3-.5-2.5-1.3-3.4l-1.4-1.5c-.8-.8-2-1.2-3.2-1H9c-2.8 0-5 2.2-5 5v2c0 2.2 1.8 4 4 4h2"/><path d="M2 21h10"/></svg>
+                        <span>Na Prática</span>
+                    </a>
+                    <a href="#digital" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-laptop"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.93 1.45H3.65a1 1 0 0 1-.93-1.45L4 16"/></svg>
+                        <span>Vida Digital</span>
+                    </a>
+                    <a href="#testemunho" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cross"><path d="M11 2v20"/><path d="M18 7h-6"/><path d="M6 7h6"/></svg>
+                        <span>Testemunho Cristão</span>
+                    </a>
+                    <a href="#conclusao" class="nav-link text-[#2E2E2E] hover:text-[#B26A8F] transition duration-200 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                        <span>Conclusão</span>
+                    </a>
+                </div>
+                <!-- Botão do menu mobile -->
+                <button id="mobile-menu-button" class="md:hidden p-2 text-[#2E2E2E] rounded-md hover:bg-[#FCEEEF]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Menu mobile (oculto por padrão) -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 flex flex-col space-y-3 bg-[#FDF8F5] rounded-lg shadow-lg p-4">
+                <a href="#fundamento" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    <span>Fundamento</span>
+                </a>
+                <a href="#beleza-modestia" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="M9.9 10.9c.3.9-.4 1.6-1.3 1.3L4 10l-.7 2.7c-.3.9.4 1.6 1.3 1.3L10 14l.7-2.7c.3-.9-.4-1.6-1.3-1.3Z"/><path d="M18.5 2.5c.2.5-.2 1-.7.8l-3.5-1.3c-.5-.2-1-.7-.8-1.2l1.3-3.5c.2-.5.7-1 .8-.8l3.5 1.3c.5.2 1 .7.8 1.2L18.5 2.5Z"/><path d="M15.4 22.3c.3.9-.4 1.6-1.3 1.3L9 20l-.7 2.7c-.3.9.4 1.6 1.3 1.3L15 24l.7-2.7c.3-.9-.4-1.6-1.3-1.3Z"/><path d="M20.3 15.1c.2.5-.2 1-.7.8l-3.5-1.3c-.5-.2-1-.7-.8-1.2l1.3-3.5c.2-.5.7-1 .8-.8l3.5 1.3c.5.2 1 .7.8 1.2L20.3 15.1Z"/></svg>
+                    <span>A Beleza da Modéstia</span>
+                </a>
+                <a href="#coracao" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    <span>O Coração da Modéstia</span>
+                </a>
+                <a href="#vestimenta-reflexo" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-t-shirt"><path d="M7 21h10"/><path d="M12.2 21h-.4c-.6 0-1-.4-1-1V5c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v15c0 .6-.4 1-1 1h-.4"/><path d="M13 2c-.6 0-1 .4-1 1v2h3V3c0-.6-.4-1-1-1h-1z"/></svg>
+                    <span>Vestimenta e Reflexo</span>
+                </a>
+                <a href="#exemplos" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb"><path d="M15 14c.2-1 .7-2 1.5-3s2.5-2.5 3.5-5c.4-1-.3-1.7-1.2-2.5C16.5 2.5 13 4 13 4"/><path d="M14.5 11.5 13 16c0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.3-.5-2.5-1.3-3.4l-1.4-1.5c-.8-.8-2-1.2-3.2-1H9c-2.8 0-5 2.2-5 5v2c0 2.2 1.8 4 4 4h2"/><path d="M2 21h10"/></svg>
+                    <span>Na Prática</span>
+                </a>
+                <a href="#digital" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-laptop"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.93 1.45H3.65a1 1 0 0 1-.93-1.45L4 16"/></svg>
+                    <span>Vida Digital</span>
+                </a>
+                <a href="#testemunho" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cross"><path d="M11 2v20"/><path d="M18 7h-6"/><path d="M6 7h6"/></svg>
+                    <span>Testemunho Cristão</span>
+                </a>
+                <a href="#conclusao" class="nav-link-mobile block py-2 px-4 text-base hover:bg-[#FCEEEF] rounded-md text-[#2E2E2E] flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                    <span>Conclusão</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Seção Hero (Banner Principal) -->
+        <section id="hero" class="relative text-center h-[70vh] flex items-center justify-center text-white overflow-hidden">
+            <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Vestes%20Modestas.jpg" class="absolute inset-0 w-full h-full object-cover" alt="Mulher em campo de flores, representando serenidade e beleza natural.">
+            <!-- Aumenta a opacidade da sobreposição preta para melhorar o contraste do texto -->
+            <div class="absolute inset-0 bg-black opacity-30"></div>
+            <div class="relative z-10 p-6 max-w-4xl mx-auto">
+                <h1 class="hero-title text-4xl md:text-6xl font-bold tracking-tight leading-tight drop-shadow-xl">
+    ENRAIZADAS NA PALAVRA: MANTENDO OS MARCOS ANTIGOS
+</h1>
+                <p class="mt-6 text-lg md:text-2xl max-w-3xl mx-auto font-light drop-shadow-xl">A modéstia da mulher cristã (Reflexo da obediência aos mandamentos divinos)</p>
+            </div>
+        </section>
+
+        <!-- Seção: A Beleza da Modéstia -->
+        <section id="beleza-modestia" class="py-20 bg-[#FDF8F5]">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="M9.9 10.9c.3.9-.4 1.6-1.3 1.3L4 10l-.7 2.7c-.3.9.4 1.6 1.3 1.3L10 14l.7-2.7c.3-.9-.4-1.6-1.3-1.3Z"/><path d="M18.5 2.5c.2.5-.2 1-.7.8l-3.5-1.3c-.5-.2-1-.7-.8-1.2l1.3-3.5c.2-.5.7-1 .8-.8l3.5 1.3c.5.2 1 .7.8 1.2L18.5 2.5Z"/><path d="M15.4 22.3c.3.9-.4 1.6-1.3 1.3L9 20l-.7 2.7c-.3.9.4 1.6 1.3 1.3L15 24l.7-2.7c.3-.9-.4-1.6-1.3-1.3Z"/><path d="M20.3 15.1c.2.5-.2 1-.7.8l-3.5-1.3c-.5-.2-1-.7-.8-1.2l1.3-3.5c.2-.5.7-1 .8-.8l3.5 1.3c.5.2 1 .7.8 1.2L20.3 15.1Z"/></svg>
+                    <span>A Beleza da Modéstia</span>
+                </h2>
+                <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">Começamos nossa jornada visual com exemplos inspiradores de vestes que refletem a beleza da modéstia cristã, demonstrando que elegância e pudor podem andar de mãos dadas.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-16">
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Vestes%20Modestas.jpg" alt="Vestes Modestas" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Vestes Modestas</h3>
+                            <p class="text-lg text-[#2E2E2E]">Peças que cobrem o corpo de forma honrosa, sem abrir mão da beleza e do estilo.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Veste%20Modesta.png" alt="Veste Modesta" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Veste Modesta</h3>
+                            <p class="text-lg text-[#2E2E2E]">Um visual que é feminino e alegre, provando que modéstia e personalidade andam juntas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Fundamento Bíblico e Obediência -->
+        <section id="fundamento" class="py-20 bg-[#FDF8F5]">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    <span>Fundamento Bíblico e Obediência</span>
+                </h2>
+                <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">As Escrituras são a base para uma vida transformada. O chamado não é para seguir regras vazias, mas para permanecer na Palavra, que nos torna sábias para a salvação e nos prepara para toda boa obra.</p>
+                <!-- Adicionada a classe 'clickable-element' para o bloco de conteúdo -->
+                <div class="mt-16 bg-white rounded-xl shadow-xl p-8 md:p-12 max-w-5xl mx-auto border-l-8 border-[#B26A8F] clickable-element">
+                    <blockquote class="text-xl md:text-2xl italic text-[#2E2E2E] leading-relaxed mb-6">
+                        "Tu, porém, permaneces naquilo que aprendeste e de que foste inteirado, sabendo de quem o tens aprendido. E que desde a tua meninice, sabes as sagradas letras, que podem fazer-te sábio para a salvação, pela fé que há em Cristo Jesus. Toda a Escritura é inspirada por Deus e útil para o ensino, para a repreensão, para a correção e para a instrução na justiça, para que o homem de Deus seja apto e plenamente preparado para toda boa obra."
+                    </blockquote>
+                    <cite class="block text-right mt-4 not-italic font-bold text-lg text-[#B26A8F]">2 Timóteo 3:14-17</cite>
+                    <p class="mt-8 text-lg text-[#2E2E2E] text-left">Quando aceitamos a Cristo, nós temos a responsabilidade de permanecer firmes na fé; somos justificados, por meio da fé, regenerados por obra do espírito santo e santificados pela obediência à Palavra de Deus. Efésios 2:8-10 e João 17:17.</p>
+                    <p class="mt-4 text-lg text-[#2E2E2E] text-left">Como novas criaturas, precisamos ter uma nova natureza e estilo de vida diferente. Nossa mente deve ser transformada através da Palavra de Deus.</p>
+                    <blockquote class="text-xl md:text-2xl italic text-[#2E2E2E] leading-relaxed mt-8">
+                        "Se me amais, guardai os meus mandamentos."
+                    </blockquote>
+                    <cite class="block text-right mt-4 not-italic font-bold text-lg text-[#B26A8F]">João 14:15</cite>
+                    <blockquote class="text-xl md:text-2xl italic text-[#2E2E2E] leading-relaxed mt-8">
+                        "E nisto sabemos que o conhecemos: Se guardarmos os seus mandamentos. Aquele que diz: Eu conheço-o, e não guarda os seus mandamentos, é mentiroso, e nele não está a verdade. Mas qualquer que guarda a sua palavra, o amor de Deus está nele verdadeiramente aperfeiçoado; nisto conhecemos que estamos nele."
+                    </blockquote>
+                    <cite class="block text-right mt-4 not-italic font-bold text-lg text-[#B26A8F]">1 João 2:3-5</cite>
+                    <p class="mt-8 text-lg text-[#2E2E2E] text-left">Quem ama a Deus, reverencia os seus ensinamentos. A obediência reflete confiança, amor e reverência. Em 1 Timóteo 2:9-10 Paulo orienta as mulheres que se vistam honestamente, com pudor e modéstia, não se adornando com tranças e com ouro, nem com pérolas ou com roupas caras, mas com boas obras, como convém a mulheres que declaram adorar a Deus.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: O Coração da Modéstia -->
+        <section id="coracao" class="py-20 floral-background">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        <span>O Coração da Modéstia</span>
+                    </h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">A verdadeira modéstia transcende a roupa; ela nasce no interior. A modéstia é uma virtude do coração, um reflexo de nossa humildade, reverência a Deus e da beleza de um espírito tranquilo, que é de grande valor aos olhos do Criador.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Adicionada a classe 'clickable-element' para os cartões de conteúdo -->
+                    <div class="bg-white p-8 rounded-xl shadow-xl text-center card-hover border border-[#FCEEEF] clickable-element">
+                        <h3 class="font-bold text-2xl text-[#B26A8F] mb-3">Humildade e Discrição</h3>
+                        <p class="mt-4 text-lg text-[#2E2E2E]">A modéstia é uma virtude relacionada à humildade e discrição; ela provém do interior da pessoa, sendo manifesta no exterior através do vestir, das palavras e das ações.</p>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para os cartões de conteúdo -->
+                    <div class="bg-white p-8 rounded-xl shadow-xl text-center card-hover border border-[#FCEEEF] clickable-element">
+                        <h3 class="font-bold text-2xl text-[#B26A8F] mb-3">Santidade e Temperança</h3>
+                        <p class="mt-4 text-lg text-[#2E2E2E]">Segundo os ensinamentos sagrados da tradição Cristã, a modéstia está ligada à uma vida pura e ao chamado à santidade, sendo, portanto, uma aplicação da temperança, virtude que modera os impulsos e protege a nossa dignidade. (valores morais e éticos).</p>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para os cartões de conteúdo -->
+                    <div class="bg-white p-8 rounded-xl shadow-xl text-center card-hover border border-[#FCEEEF] clickable-element">
+                        <h3 class="font-bold text-2xl text-[#B26A8F] mb-3">Transformação da Mente</h3>
+                        <p class="mt-4 text-lg text-[#2E2E2E]">Paulo nos exorta quanto à influência do mundo sobre nós. O mundo jaz no maligno e sua a influência pode nos afastar de Deus.</p>
+                        <blockquote class="text-lg italic text-[#2E2E2E] leading-relaxed mt-6">
+                            "Não se amoldem ao padrão deste mundo, mas transformem-se pela renovação da sua mente, para que sejam capazes de experimentar e comprovar a boa, agradável e perfeita vontade de Deus."
+                        </blockquote>
+                        <cite class="block text-right mt-3 not-italic font-bold text-base text-[#B26A8F]">Romanos 12:2 – NVI</cite>
+                        <blockquote class="text-lg italic text-[#2E2E2E] leading-relaxed mt-6">
+                            "Andai em Espírito, e não cumprireis as obras da carne."
+                        </blockquote>
+                        <cite class="block text-right mt-3 not-italic font-bold text-base text-[#B26A8F]">Gálatas 5:16</cite>
+                        <p class="mt-4 text-lg text-[#2E2E2E]">A lascívia é uma manifestação da natureza pecaminosa que se opõe à direção do Espírito Santo, prejudicando nossa comunhão com Deus. Gálatas 5:19-22.</p>
+                        <p class="mt-2 text-lg text-[#2E2E2E]">Não nos convém usar trajes indecorosos ou lascivos, seja em qualquer lugar que for.</p>
+                        <blockquote class="text-lg italic text-[#2E2E2E] leading-relaxed mt-6">
+                            "Todas as coisas me são lícitas, mas nem todas as coisas convêm; todas as coisas me são lícitas, mas eu não me deixarei dominar por nenhuma."
+                        </blockquote>
+                        <cite class="block text-right mt-3 not-italic font-bold text-base text-[#B26A8F]">1 Coríntios 6:12</cite>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: A Vestimenta como Reflexo do Coração -->
+        <section id="vestimenta-reflexo" class="py-20 bg-[#FDF8F5]">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-t-shirt"><path d="M7 21h10"/><path d="M12.2 21h-.4c-.6 0-1-.4-1-1V5c0-.6.4-1 1-1h4c.6 0 1 .4 1 1v15c0 .6-.4 1-1 1h-.4"/><path d="M13 2c-.6 0-1 .4-1 1v2h3V3c0-.6-.4-1-1-1h-1z"/></svg>
+                    <span>A Vestimenta como Reflexo do Coração</span>
+                </h2>
+                <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">Nossas roupas são mais do que tecido; elas comunicam. A vestimenta reflete nosso caráter, testemunho e identidade, e podemos usá-la para honrar a Deus, evitando exageros e buscando a beleza que vem de um espírito dócil e tranquilo.</p>
+                <!-- Adicionada a classe 'clickable-element' para o bloco de conteúdo -->
+                <div class="mt-16 bg-white rounded-xl shadow-xl p-8 md:p-12 max-w-5xl mx-auto border-l-8 border-[#B26A8F] clickable-element">
+                    <p class="text-lg text-[#2E2E2E] text-left">A vestimenta como reflexo do coração: pode refletir o caráter, o testemunho e a identidade diante do mundo e de Deus. (transmite mensagem), o que estamos testemunhando? Nossa vestimenta fala quem nós somos.</p>
+                    <p class="mt-4 text-lg text-[#2E2E2E] text-left">Vestir-se de forma modesta é evitar roupas provocativas ou ostensivas. “Evitar exageros nos adornos”.</p>
+                    <blockquote class="text-xl md:text-2xl italic text-[#2E2E2E] leading-relaxed mt-8">
+                        "A beleza de vocês não deve estar nos enfeites exteriores, como cabelos trançados e joias de ouro ou roupas finas. Ao contrário, esteja no seu interior, que não perece, beleza demonstrada num espírito dócil e tranquilo, o que é de grande valor para Deus."
+                    </blockquote>
+                    <cite class="block text-right mt-4 not-italic font-bold text-lg text-[#B26A8F]">1 Pedro 3:3-4</cite>
+                    <p class="mt-8 text-lg text-[#2E2E2E] text-left">Precisamos ter moderação: o nosso exterior transmite o que está dentro de nós (interior).</p>
+                    <p class="mt-4 text-lg text-[#2E2E2E] text-left">Podemos e devemos vestir com elegância sem ser vulgar. Gálatas 5:24-25 diz: "E os que são de Cristo crucificaram a carne com suas concupiscências. Se vivemos no Espírito, andemos também no Espírito."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Modéstia na Prática: Exemplos Visuais a Evitar -->
+        <section id="exemplos" class="py-20 floral-background">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb"><path d="M15 14c.2-1 .7-2 1.5-3s2.5-2.5 3.5-5c.4-1-.3-1.7-1.2-2.5C16.5 2.5 13 4 13 4"/><path d="M14.5 11.5 13 16c0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.3-.5-2.5-1.3-3.4l-1.4-1.5c-.8-.8-2-1.2-3.2-1H9c-2.8 0-5 2.2-5 5v2c0 2.2 1.8 4 4 4h2"/><path d="M2 21h10"/></svg>
+                        <span>Modéstia na Prática: Exemplos Visuais a Evitar</span>
+                    </h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">Exemplos de vestes que devem ser evitadas por serem lascivas ou provocantes, contrariando os princípios da modéstia cristã.</p>
+                </div>
+                <!-- Galeria de Imagens -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Veste%20Lasciva%20-%20Colada%20em%20Excesso.jpg" alt="Veste Lasciva - Colada em Excesso" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Roupas Excessivamente Justas</h3>
+                            <p class="text-lg text-[#2E2E2E]">Roupas justas que revelam a forma do corpo de maneira excessiva.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Camiseta%20-%20Barriga%20a%20amostra.jpg" alt="Camiseta - Barriga a Mostra" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Camiseta e Barriga à Mostra</h3>
+                            <p class="text-lg text-[#2E2E2E]">Roupas curtas que mostram mais partes do corpo do que o considerado socialmente aceitável.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Ombro%20a%20ombro.jpg" alt="Ombro a Ombro" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Ombro a Ombro</h3>
+                            <p class="text-lg text-[#2E2E2E]">Decotes grandes com o busto à mostra, transparências e fendas.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Helanca%20sem%20forro%20com%20tanga.jpg" alt="Helanca sem forro com tanga" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Helanca sem Forro com Tanga</h3>
+                            <p class="text-lg text-[#2E2E2E]">Cuidado com tipos de tecidos, modelos e tamanhos que não se adequam ao corpo.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Busto%20aparecendo.png" alt="Busto aparecendo" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Busto Aparecendo</h3>
+                            <p class="text-lg text-[#2E2E2E]">Roupas que chamam a atenção impura para as partes íntimas do corpo.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Ombros%20e%20barriga%20amostra.jpg" alt="Ombros e barriga à mostra" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Ombros e Barriga à Mostra</h3>
+                            <p class="text-lg text-[#2E2E2E]">Exposição excessiva do corpo, contrária aos princípios de pudor.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Short.jpg" alt="Short" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Shorts Excessivamente Curtos</h3>
+                            <p class="text-lg text-[#2E2E2E]">Peças que expõem mais do que o adequado para a mulher cristã.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Vestido%20trasnparente.jpg" alt="Vestido transparente" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Roupas Transparentes</h3>
+                            <p class="text-lg text-[#2E2E2E]">Transparências que comprometem a modéstia e o pudor.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Justo%20ou%20colado.jpg" alt="Justo ou colado" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Justa ou Colada</h3>
+                            <p class="text-lg text-[#2E2E2E]">Roupas que marcam o corpo de forma excessiva, atraindo atenção impura.</p>
+                        </div>
+                    </div>
+                     <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Justo%20ou%20colado%202.jpg" alt="Justa ou colada 2" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Justa ou Colada (2)</h3>
+                            <p class="text-lg text-[#2E2E2E]">Reafirmando a necessidade de evitar peças que revelam demais.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Justa.jpg" alt="Saia justa" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Saia Justa</h3>
+                            <p class="text-lg text-[#2E2E2E]">Saias que limitam o movimento e marcam as curvas de forma inapropriada.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Cal%C3%A7a%20Legging.jpg" alt="Calça Legging" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Calça Legging</h3>
+                            <p class="text-lg text-[#2E2E2E]">Peças que podem ser problemáticas se não usadas com moderação e cobrindo as partes íntimas.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://raw.githubusercontent.com/andrefesan/adeuza/refs/heads/main/Slide%20Mae/Cal%C3%A7a%20comprida%20colada.png" alt="Calça comprida colada" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Calça Comprida Colada</h3>
+                            <p class="text-lg text-[#2E2E2E]">Mesmo calças compridas podem ser inadequadas se forem excessivamente justas.</p>
+                        </div>
+                    </div>
+                    <!-- Adicionada a classe 'clickable-element' para as imagens -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-xl card-hover border border-[#FCEEEF] clickable-element">
+                        <img src="https://placehold.co/600x400/FCEEEF/2E2E2E?text=N%C3%A3o%20usar%20traje%20masculino" alt="Não usar traje masculino" class="w-full h-96 object-cover">
+                        <div class="p-6">
+                            <h3 class="font-bold text-2xl text-[#2E2E2E] mb-2">Não Usar Traje Masculino</h3>
+                            <p class="text-lg text-[#2E2E2E]">"A mulher não usará roupas de homem, e o homem não usará roupas de mulher, pois o Senhor, o seu Deus, tem aversão por todo aquele que assim procede." (Deuteronômio 22:5)</p>
+                            <p class="text-lg text-[#2E2E2E] mt-2">Se não temos vergonha de expormos a nudez (vergonha), algo está errado!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Modéstia na Vida Digital -->
+        <section id="digital" class="py-20 bg-[#FDF8F5]">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-laptop"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.93 1.45H3.65a1 1 0 0 1-.93-1.45L4 16"/></svg>
+                    <span>Modéstia na Vida Digital</span>
+                </h2>
+                <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">A era digital nos convida a estender os princípios da modéstia para além do guarda-roupa. Nossas postagens, fotos e interações online podem honrar a Deus ou incentivar a vaidade e a sensualidade; por isso, redes sociais devem ser usadas para compartilhar o que é bom, belo e verdadeiro.</p>
+                <div class="mt-10 flex justify-center items-center space-x-4 text-[#B26A8F]">
+                    <!-- Ícone de celular para representar a vida digital -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <p class="italic text-2xl font-semibold">"O que você quer mostrar?"</p>
+                </div>
+                <!-- Adicionada a classe 'clickable-element' para o bloco de conteúdo -->
+                <div class="mt-16 bg-white rounded-xl shadow-xl p-8 md:p-12 max-w-5xl mx-auto border-l-8 border-[#B26A8F] clickable-element">
+                    <p class="text-lg text-[#2E2E2E] text-left">Em tempos de exposição digital, a modéstia deve ser aplicada também no uso das redes sociais. (o que você quer mostrar)?</p>
+                    <p class="mt-4 text-lg text-[#2E2E2E] text-left">Fotos e conteúdo que incentivam a vaidade ou a sensualidade estão em contradição com os princípios e valores da modéstia, causando influências negativas aos que os consomem.</p>
+                    <p class="mt-4 text-lg text-[#2E2E2E] text-left">O uso modesto das redes sociais promove um ambiente mais saudável, onde o foco não está na exibição, mas no compartilhamento de algo bom.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Testemunho Cristão e Legado -->
+        <section id="testemunho" class="py-20 floral-background">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cross"><path d="M11 2v20"/><path d="M18 7h-6"/><path d="M6 7h6"/></svg>
+                    <span>Testemunho Cristão e Legado</span>
+                </h2>
+                <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">Nossa vida é uma carta aberta. Devemos ser um testemunho vivo do Evangelho, mantendo os marcos antigos de fé e pureza; vivendo em santidade, refletindo a imagem do Criador e aguardando a vinda de nosso Senhor Jesus Cristo.</p>
+                <!-- Adicionada a classe 'clickable-element' para o bloco de conteúdo -->
+                <div class="mt-16 bg-white rounded-xl shadow-xl p-8 md:p-12 max-w-5xl mx-auto border-l-8 border-[#B26A8F] clickable-element">
+                    <p class="text-lg text-[#2E2E2E] text-left">O cristão que vive a modéstia é um testemunho vivo do Evangelho. Suas ações e escolhas ajudam os outros a buscarem uma vida de virtude, revelando que a verdadeira liberdade não está em ceder às paixões, mas em ordená-las à luz da pureza da fé.</p>
+                    <blockquote class="text-xl md:text-2xl italic text-[#2E2E2E] leading-relaxed mt-8">
+                        "Bem-aventurados os puros de coração, porque verão a Deus."
+                    </blockquote>
+                    <cite class="block text-right mt-4 not-italic font-bold text-lg text-[#B26A8F]">Mateus 5:8</cite>
+                    <p class="mt-8 text-lg text-[#2E2E2E] text-left">Quando fazemos a vontade de Deus, não cedemos às influências mundanas. Isto é um exercício de autocontrole e maturidade espiritual. Nós, cristãos, somos o sal da terra e luz do mundo Mateus 5:14 e 23 e, para isso, devemos renovar as nossas mentes por meio do Espírito Santo - Efésios 4:23. A presença do Espírito Santo nos capacita a compreender e a viver de acordo com a Sua Palavra. João 14:26.</p>
+                    <blockquote class="text-xl md:text-2xl italic text-[#2E2E2E] leading-relaxed mt-8">
+                        "Não mude de lugar os antigos marcos que limitam as propriedades e que foram colocados por seus antepassados."
+                    </blockquote>
+                    <cite class="block text-right mt-4 not-italic font-bold text-lg text-[#B26A8F]">Provérbios 22:28 (valores e princípios sagrados)</cite>
+                    <p class="mt-8 text-lg text-[#2E2E2E] text-left">A modéstia não é coisa do passado, os preceitos divinos são válidos para todos os tempos; modas e estilos mudam, mas a Bíblia nos traz princípios universais e permanece imutável. Mateus 24:35. O céu e a terra passarão, mas as minhas palavras não hão de passar.</p>
+                    <p class="mt-4 text-lg text-[#2E2E2E] text-left">O nosso corpo não é objeto de consumo, mas o reflexo da beleza e imagem do Criador. 1 Tessalonicenses 5:23 - E o mesmo Deus de paz vos santifique em tudo; e todo o vosso espírito, e alma, e corpo, sejam plenamente conservados irrepreensíveis para a vinda de nosso Senhor Jesus Cristo.</p>
+                    <p class="mt-4 text-lg text-[#2E2E2E] text-left">A mulher que ama a Deus procura viver em santidade, sem se entregar à imoralidade. A beleza é enganosa, e a formosura é passageira; mas a mulher que teme o Senhor será elogiada - Provérbios 31:30.</p>
+                    <blockquote class="text-xl md:text-2xl italic text-[#2E2E2E] leading-relaxed mt-8">
+                        "Então, irmãos, estai firmes e retende as tradições que vos foram ensinadas, seja por palavra, seja por epístola nossa."
+                    </blockquote>
+                    <cite class="block text-right mt-4 not-italic font-bold text-lg text-[#B26A8F]">2 Tessalonicenses 2:15</cite>
+                    <p class="mt-8 text-lg text-[#2E2E2E] text-left">Manter-se fiel aos princípios cristãos e ao propósito de servir a Deus sempre.</p>
+                    <!-- Frase final em destaque -->
+                    <p class="mt-10 text-xl md:text-3xl font-bold text-[#B26A8F] text-center p-6 bg-[#FCEEEF] rounded-lg shadow-inner border border-[#B26A8F]">
+                        A modéstia cristã é uma forma de adoração a Deus!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Conclusão e Download -->
+        <section id="conclusao" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-5xl font-bold text-[#B26A8F] mb-4 flex items-center justify-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                    <span>Conclusão e Download</span>
+                </h2>
+                <p class="mt-4 max-w-3xl mx-auto text-xl text-[#2E2E2E]">Obrigada a todas. Que estas verdades inspirem você a viver uma vida que glorifique a Deus em todos os aspectos. Caso desejem, é possível baixar a apostila completa em PDF.</p>
+                <a href="https://drive.usercontent.google.com/u/0/uc?id=1t8Rwu6qzE5Ozg91jXOKLR3e_sljR0bo2&export=download" download class="mt-10 inline-block bg-[#B26A8F] text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-[#9C5A7B] transition duration-300 text-lg">
+                    Baixar Apostila PDF Completa
+                </a>
+                <div class="mt-16 text-[#2E2E2E] text-base">
+                    <p>Adeuza Ferreira Santana.</p>
+                    <p>UEMADAC – União de esposas de ministros das assembléias de Deus no Acre</p>
+                    <p>Senador Guiomard - AC, 19 de julho de 2025.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-[#2E2E2E] text-white py-8">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>&copy; 2025 | André Santana</p>
+        </div>
+    </footer>
+
+    <!-- Overlay do Modal para Imagens e Cards Focados -->
+    <div id="modal-overlay" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[100]">
+        <!-- Contêiner para destacar cards/textos -->
+        <div id="highlighted-card-container" class="flex items-center justify-center w-full h-full absolute top-0 left-0"></div>
+        <!-- Conteúdo do Modal para Imagem -->
+        <div id="image-modal-content" class="image-modal-content relative max-w-4xl max-h-[90vh] overflow-auto p-4 bg-white rounded-lg shadow-2xl flex items-center justify-center">
+            <img id="full-image" class="max-w-full max-h-[85vh] object-contain rounded-lg" src="" alt="Imagem em destaque">
+            <button id="image-close-button" class="close-button absolute top-2 right-2 text-white text-3xl font-bold p-2 rounded-full hover:bg-gray-700 transition-colors">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Menu mobile...
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                const navLinks = document.querySelectorAll('.nav-link-mobile');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+            // Navegação ativa...
+            const sections = document.querySelectorAll('section[id]');
+            const navItems = document.querySelectorAll('header nav a');
+            function updateActiveNav() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navItems.forEach(a => {
+                    a.classList.remove('active-nav');
+                    if (a.href.includes(current)) {
+                        a.classList.add('active-nav');
+                    }
+                });
+            }
+            window.addEventListener('scroll', updateActiveNav);
+            updateActiveNav();
+
+            // Destacar elementos ao clicar:
+            const modalOverlay = document.getElementById('modal-overlay');
+            const fullImage = document.getElementById('full-image');
+            const imageModalContent = document.getElementById('image-modal-content');
+            const imageCloseButton = document.getElementById('image-close-button');
+            const highlightedCardContainer = document.getElementById('highlighted-card-container');
+            const clickableElements = document.querySelectorAll('.clickable-element');
+
+            let currentFocusedCard = null;
+            let cardOriginalParent = null;
+            let cardOriginalNextSibling = null;
+
+            function closeHighlight() {
+                modalOverlay.classList.remove('active');
+                modalOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+                if (currentFocusedCard) {
+                    currentFocusedCard.style.position = '';
+                    currentFocusedCard.style.zIndex = '';
+                    currentFocusedCard.style.left = '';
+                    currentFocusedCard.style.top = '';
+                    currentFocusedCard.style.transform = '';
+                    currentFocusedCard.style.width = '';
+                    currentFocusedCard.style.height = '';
+                    currentFocusedCard.style.maxWidth = '';
+                    currentFocusedCard.style.maxHeight = '';
+                    currentFocusedCard.style.overflowY = '';
+                    currentFocusedCard.style.margin = '';
+                    currentFocusedCard.style.border = '';
+                    currentFocusedCard.style.boxShadow = '';
+                    if (cardOriginalParent) {
+                        if (cardOriginalNextSibling) {
+                            cardOriginalParent.insertBefore(currentFocusedCard, cardOriginalNextSibling);
+                        } else {
+                            cardOriginalParent.appendChild(currentFocusedCard);
+                        }
+                    }
+                    currentFocusedCard = null;
+                    cardOriginalParent = null;
+                    cardOriginalNextSibling = null;
+                }
+                imageModalContent.classList.add('hidden');
+            }
+
+            imageCloseButton.addEventListener('click', closeHighlight);
+
+            modalOverlay.addEventListener('click', function(event) {
+                const highlightedCard = highlightedCardContainer.firstElementChild;
+                if (
+                    event.target === modalOverlay ||
+                    (
+                        highlightedCard &&
+                        !highlightedCard.contains(event.target) &&
+                        event.target !== imageModalContent &&
+                        !imageModalContent.contains(event.target)
+                    )
+                ) {
+                    closeHighlight();
+                }
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') closeHighlight();
+            });
+
+            clickableElements.forEach(element => {
+                element.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    if (currentFocusedCard || !modalOverlay.classList.contains('hidden')) {
+                        closeHighlight();
+                    }
+                    const imgElement = this.querySelector('img');
+                    if (imgElement) {
+                        fullImage.src = imgElement.src;
+                        imageModalContent.classList.remove('hidden');
+                        modalOverlay.classList.remove('hidden');
+                        modalOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        currentFocusedCard = this;
+                        cardOriginalParent = currentFocusedCard.parentNode;
+                        cardOriginalNextSibling = currentFocusedCard.nextSibling;
+                        highlightedCardContainer.appendChild(currentFocusedCard);
+
+                        // Estilos para destaque com rolagem funcional
+                        currentFocusedCard.style.position = 'fixed';
+                        currentFocusedCard.style.zIndex = '102';
+                        currentFocusedCard.style.left = '50%';
+                        currentFocusedCard.style.top = '50%';
+                        currentFocusedCard.style.transform = 'translate(-50%, -50%) scale(1.04)';
+                        currentFocusedCard.style.width = '90vw';
+                        currentFocusedCard.style.maxWidth = '800px';
+                        currentFocusedCard.style.maxHeight = '90vh';
+                        currentFocusedCard.style.overflowY = 'auto';
+                        currentFocusedCard.style.margin = '0 auto';
+                        currentFocusedCard.style.border = '4px solid #B26A8F';
+                        currentFocusedCard.style.boxShadow = '0 0 40px rgba(178, 106, 143, 0.8)';
+                        imageModalContent.classList.add('hidden');
+                        modalOverlay.classList.remove('hidden');
+                        modalOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
